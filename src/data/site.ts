@@ -123,6 +123,7 @@ export const site = {
       { label: "Miért Landora?", href: "#trust" },
       { label: "Kapcsolat", href: "#contact" },
       { label: "Impresszum", href: "/impresszum/" },
+      { label: "Adatkezelés", href: "/adatkezeles/" },
     ],
   },
 };
