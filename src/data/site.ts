@@ -8,6 +8,7 @@ export const site = {
     name: "Landora",
     role: "Személyre szabott landing page-ek",
     initials: "L",
+    logo: "/images/landora-logo.png",
   },
   nav: [
     { label: "Mit szabunk rád?", href: "#services" },
@@ -98,11 +99,30 @@ export const site = {
     city: "Dunakiliti",
     formAction: "mailto:zoltan.fulop21@gmail.com",
   },
+  legal: {
+    title: "Impresszum",
+    description: "A Landora weboldal szolgáltatói és kapcsolatfelvételi adatai.",
+    operatorName: "Kiegészítendő: szolgáltató neve / vállalkozó neve",
+    brandName: "Landora",
+    address: "Kiegészítendő: pontos székhely vagy lakcím, Dunakiliti",
+    email: "zoltan.fulop21@gmail.com",
+    phone: "+36 20 500 1702",
+    taxNumber: "Kiegészítendő: adószám, ha releváns",
+    registrationAuthority: "Kiegészítendő: nyilvántartó hatóság vagy bíróság, ha releváns",
+    registrationNumber: "Kiegészítendő: nyilvántartási szám, ha releváns",
+    hostingProvider: "Kiegészítendő: tárhelyszolgáltató neve",
+    hostingProviderAddress: "Kiegészítendő: tárhelyszolgáltató székhelye / címe",
+    hostingProviderEmail: "Kiegészítendő: tárhelyszolgáltató kapcsolattartási email címe",
+    activity:
+      "Személyre szabott landing page-ek tervezése és elkészítése vállalkozások számára.",
+    updatedAt: "2026. augusztus 15.",
+  },
   footer: {
     links: [
       { label: "Mit szabunk rád?", href: "#services" },
       { label: "Miért Landora?", href: "#trust" },
       { label: "Kapcsolat", href: "#contact" },
+      { label: "Impresszum", href: "/impresszum/" },
     ],
   },
 };

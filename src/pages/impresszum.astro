@@ -1,0 +1,210 @@
+---
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../data/site";
+
+const nav = site.nav.map((item) => ({
+  ...item,
+  href: `/${item.href}`,
+}));
+
+const footerLinks = site.footer.links.map((item) => ({
+  ...item,
+  href: item.href.startsWith("#") ? `/${item.href}` : item.href,
+}));
+
+const legalGroups = [
+  {
+    id: "provider",
+    title: "Szolgáltató adatai",
+    rows: [
+      ["Szolgáltató neve", site.legal.operatorName],
+      ["Márkanév", site.legal.brandName],
+      ["Székhely / lakcím", site.legal.address],
+      ["Tevékenység", site.legal.activity],
+    ],
+  },
+  {
+    id: "contact",
+    title: "Kapcsolat",
+    rows: [
+      ["Email", site.legal.email],
+      ["Telefon", site.legal.phone],
+    ],
+  },
+  {
+    id: "registration",
+    title: "Nyilvántartási és adózási adatok",
+    rows: [
+      ["Adószám", site.legal.taxNumber],
+      ["Nyilvántartó hatóság", site.legal.registrationAuthority],
+      ["Nyilvántartási szám", site.legal.registrationNumber],
+    ],
+  },
+  {
+    id: "hosting",
+    title: "Tárhelyszolgáltató",
+    rows: [
+      ["Név", site.legal.hostingProvider],
+      ["Cím", site.legal.hostingProviderAddress],
+      ["Email", site.legal.hostingProviderEmail],
+    ],
+  },
+];
+---
+
+<BaseLayout title={`${site.legal.title} | ${site.brand.name}`} description={site.legal.description}>
+  <Header brand={site.brand} nav={nav} contact={site.contact} />
+  <main id="main-content">
+    <section class="legal-page">
+      <div class="legal-page__inner">
+        <a class="legal-page__back" href="/">Vissza a főoldalra</a>
+        <p class="section__eyebrow">Jogi információk</p>
+        <h1>{site.legal.title}</h1>
+        <p class="legal-page__lead">
+          Ezen az oldalon a Landora weboldal üzemeltetésével és a szolgáltatóval
+          kapcsolatos alapadatok találhatók. A kiegészítendő mezőket az éles
+          publikálás előtt pontosítani kell.
+        </p>
+
+        <div class="legal-page__grid">
+          {
+            legalGroups.map((group) => (
+              <section class="legal-card" aria-labelledby={`${group.id}-title`}>
+                <h2 id={`${group.id}-title`}>{group.title}</h2>
+                <dl>
+                  {
+                    group.rows.map(([label, value]) => (
+                      <div>
+                        <dt>{label}</dt>
+                        <dd>{value}</dd>
+                      </div>
+                    ))
+                  }
+                </dl>
+              </section>
+            ))
+          }
+        </div>
+
+        <p class="legal-page__note">Utolsó frissítés: {site.legal.updatedAt}</p>
+      </div>
+    </section>
+  </main>
+  <Footer brand={site.brand} links={footerLinks} />
+</BaseLayout>
+
+<style>
+  .legal-page {
+    min-height: 72svh;
+    background:
+      linear-gradient(180deg, rgba(127, 153, 127, 0.14), transparent 18rem),
+      #fff;
+    padding: 5.5rem 1.25rem 6rem;
+  }
+
+  .legal-page__inner {
+    width: min(100%, 980px);
+    margin: 0 auto;
+  }
+
+  .legal-page__back {
+    display: inline-flex;
+    margin-bottom: 2rem;
+    color: var(--color-muted);
+    font-weight: 760;
+  }
+
+  .legal-page__back:hover {
+    color: var(--color-accent-strong);
+  }
+
+  h1 {
+    max-width: 760px;
+    margin: 0;
+    font-size: 3.1rem;
+    font-weight: 820;
+    letter-spacing: 0;
+    line-height: 1;
+  }
+
+  .legal-page__lead {
+    max-width: 720px;
+    margin: 1.2rem 0 0;
+    color: var(--color-muted);
+    font-size: 1.08rem;
+  }
+
+  .legal-page__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+
+  .legal-card {
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    padding: 1.35rem;
+  }
+
+  .legal-card h2 {
+    margin: 0 0 1.1rem;
+    font-size: 1.2rem;
+    letter-spacing: 0;
+    line-height: 1.2;
+  }
+
+  .legal-card dl {
+    display: grid;
+    gap: 0.9rem;
+    margin: 0;
+  }
+
+  .legal-card dl div {
+    display: grid;
+    gap: 0.18rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid rgba(220, 228, 218, 0.9);
+  }
+
+  .legal-card dl div:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .legal-card dt {
+    color: var(--color-muted);
+    font-size: 0.88rem;
+    font-weight: 760;
+  }
+
+  .legal-card dd {
+    margin: 0;
+    color: var(--color-ink);
+    overflow-wrap: anywhere;
+  }
+
+  .legal-page__note {
+    margin: 2rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.94rem;
+  }
+
+  @media (max-width: 760px) {
+    .legal-page {
+      padding: 4rem 1rem 4.5rem;
+    }
+
+    h1 {
+      font-size: 2.35rem;
+    }
+
+    .legal-page__grid {
+      grid-template-columns: 1fr;
+      margin-top: 2.2rem;
+    }
+  }
+</style>
