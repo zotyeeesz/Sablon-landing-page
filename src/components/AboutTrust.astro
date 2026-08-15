@@ -1,0 +1,160 @@
+---
+interface Props {
+  about: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    steps: string[];
+  };
+  trust: {
+    eyebrow: string;
+    title: string;
+    items: {
+      value: string;
+      label: string;
+    }[];
+  };
+}
+
+const { about, trust } = Astro.props;
+---
+
+<section class="about-trust section" id="about" aria-labelledby="about-title">
+  <div class="section__inner about-trust__grid">
+    <div class="about-trust__story">
+      <p class="section__eyebrow">{about.eyebrow}</p>
+      <h2 class="section__title" id="about-title">{about.title}</h2>
+      <p>{about.lead}</p>
+
+      <ol class="about-trust__steps">
+        {about.steps.map((step) => <li>{step}</li>)}
+      </ol>
+    </div>
+
+    <aside class="about-trust__proof" id="trust" aria-labelledby="trust-title">
+      <p class="section__eyebrow">{trust.eyebrow}</p>
+      <h2 id="trust-title">{trust.title}</h2>
+
+      <div class="about-trust__items">
+        {
+          trust.items.map((item) => (
+            <div class="about-trust__item">
+              <strong>{item.value}</strong>
+              <span>{item.label}</span>
+            </div>
+          ))
+        }
+      </div>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .about-trust {
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  .about-trust :global(.section__eyebrow) {
+    color: #f0ab90;
+  }
+
+  .about-trust__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(22rem, 0.72fr);
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-trust__story {
+    max-width: 690px;
+  }
+
+  .about-trust__story p:not(.section__eyebrow) {
+    margin: 1.25rem 0 0;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 1.08rem;
+  }
+
+  .about-trust__steps {
+    display: grid;
+    gap: 0.9rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: steps;
+  }
+
+  .about-trust__steps li {
+    position: relative;
+    min-height: 3.2rem;
+    padding: 0.2rem 0 0.2rem 3.4rem;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .about-trust__steps li::before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: grid;
+    width: 2.35rem;
+    height: 2.35rem;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    content: counter(steps);
+    counter-increment: steps;
+    font-weight: 800;
+  }
+
+  .about-trust__proof {
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 1.6rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .about-trust__proof h2 {
+    margin: 0;
+    font-size: 1.55rem;
+    letter-spacing: 0;
+    line-height: 1.18;
+  }
+
+  .about-trust__items {
+    display: grid;
+    gap: 1px;
+    margin-top: 1.6rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .about-trust__item {
+    display: grid;
+    gap: 0.3rem;
+    background: rgba(23, 33, 29, 0.58);
+    padding: 1.1rem;
+  }
+
+  .about-trust__item strong {
+    color: #fff;
+    font-size: 1rem;
+  }
+
+  .about-trust__item span {
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.93rem;
+  }
+
+  @media (max-width: 860px) {
+    .about-trust__grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+</style>

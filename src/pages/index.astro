@@ -1,17 +1,23 @@
 ---
-
+import AboutTrust from "../components/AboutTrust.astro";
+import Contact from "../components/Contact.astro";
+import CTA from "../components/CTA.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Services from "../components/Services.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../data/site";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title={site.meta.title} description={site.meta.description}>
+  <Header brand={site.brand} nav={site.nav} contact={site.contact} />
+  <main id="main-content">
+    <Hero hero={site.hero} />
+    <Services intro={site.servicesIntro} services={site.services} />
+    <AboutTrust about={site.about} trust={site.trust} />
+    <CTA cta={site.cta} />
+    <Contact contact={site.contact} />
+  </main>
+  <Footer brand={site.brand} links={site.footer.links} />
+</BaseLayout>

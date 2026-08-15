@@ -1,0 +1,172 @@
+---
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  brand: {
+    name: string;
+    role: string;
+    initials: string;
+  };
+  nav: NavItem[];
+  contact: {
+    email: string;
+  };
+}
+
+const { brand, nav, contact } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="#main-content" aria-label={`${brand.name} főoldal`}>
+      <span class="brand__mark" aria-hidden="true">{brand.initials}</span>
+      <span class="brand__copy">
+        <strong>{brand.name}</strong>
+        <span>{brand.role}</span>
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="Fő navigáció">
+      {
+        nav.map((item) => (
+          <a class="site-nav__link" href={item.href}>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <a class="button button--secondary site-header__cta" href={`mailto:${contact.email}`}>
+      Email
+    </a>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: 1px solid rgba(220, 228, 218, 0.82);
+    background: rgba(247, 248, 243, 0.88);
+    backdrop-filter: blur(18px);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: min(100%, var(--container));
+    min-height: 4.75rem;
+    margin: 0 auto;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 14rem;
+  }
+
+  .brand__mark {
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 8px;
+    background: var(--color-ink);
+    color: #fff;
+    font-weight: 850;
+    line-height: 1;
+  }
+
+  .brand__copy {
+    display: grid;
+    gap: 0.05rem;
+  }
+
+  .brand__copy strong {
+    font-size: 0.98rem;
+    line-height: 1.2;
+  }
+
+  .brand__copy span {
+    color: var(--color-muted);
+    font-size: 0.78rem;
+    line-height: 1.2;
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  .site-nav__link {
+    border-radius: 6px;
+    color: var(--color-muted);
+    font-size: 0.93rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0.72rem 0.85rem;
+  }
+
+  .site-nav__link:hover {
+    background: rgba(127, 153, 127, 0.13);
+    color: var(--color-ink);
+  }
+
+  .site-header__cta {
+    min-height: 2.65rem;
+    padding-inline: 1rem;
+  }
+
+  @media (max-width: 860px) {
+    .site-header__inner {
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      min-height: auto;
+    }
+
+    .site-nav {
+      order: 3;
+      width: 100%;
+      justify-content: flex-start;
+      overflow-x: auto;
+      padding-bottom: 0.2rem;
+      scrollbar-width: none;
+    }
+
+    .site-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .site-nav__link {
+      flex: 0 0 auto;
+      padding-inline: 0.7rem;
+      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .brand {
+      min-width: 0;
+    }
+
+    .brand__copy span {
+      display: none;
+    }
+
+    .site-header__cta {
+      min-height: 2.5rem;
+      padding-inline: 0.85rem;
+    }
+  }
+</style>
