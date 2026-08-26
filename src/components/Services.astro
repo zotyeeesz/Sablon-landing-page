@@ -1,16 +1,9 @@
 ---
-interface Service {
-  title: string;
-  text: string;
-}
+import type { SectionIntro, ServiceItem } from "../types/site";
 
 interface Props {
-  intro: {
-    eyebrow: string;
-    title: string;
-    lead: string;
-  };
-  services: Service[];
+  intro: SectionIntro;
+  services: ServiceItem[];
 }
 
 const { intro, services } = Astro.props;
@@ -21,29 +14,31 @@ const { intro, services } = Astro.props;
     <div class="section__header">
       <p class="section__eyebrow">{intro.eyebrow}</p>
       <h2 class="section__title" id="services-title">{intro.title}</h2>
-      <p class="section__lead">{intro.lead}</p>
+      {intro.lead && <p class="section__lead">{intro.lead}</p>}
     </div>
 
-    <div class="services__grid">
-      {
-        services.map((service, index) => (
-          <article class="service-card">
-            <span class="service-card__index" aria-hidden="true">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <h3>{service.title}</h3>
-            <p>{service.text}</p>
-          </article>
-        ))
-      }
-    </div>
+    {
+      services.length > 0 && (
+        <div class="services__grid">
+          {services.map((service, index) => (
+            <article class="service-card">
+              <span class="service-card__index" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3>{service.title}</h3>
+              <p>{service.text}</p>
+            </article>
+          ))}
+        </div>
+      )
+    }
   </div>
 </section>
 
 <style>
   .services {
     background:
-      linear-gradient(180deg, #f7f8f3 0%, #ffffff 34%, #ffffff 100%);
+      linear-gradient(180deg, var(--color-bg) 0%, var(--color-surface) 34%, var(--color-surface) 100%);
   }
 
   .services__grid {
@@ -59,7 +54,7 @@ const { intro, services } = Astro.props;
 
   .service-card {
     min-height: 19rem;
-    background: #fff;
+    background: var(--color-surface);
     padding: 1.6rem;
   }
 

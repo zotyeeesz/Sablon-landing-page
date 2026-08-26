@@ -1,19 +1,9 @@
 ---
+import type { AboutConfig, TrustConfig } from "../types/site";
+
 interface Props {
-  about: {
-    eyebrow: string;
-    title: string;
-    lead: string;
-    steps: string[];
-  };
-  trust: {
-    eyebrow: string;
-    title: string;
-    items: {
-      value: string;
-      label: string;
-    }[];
-  };
+  about: AboutConfig;
+  trust: TrustConfig;
 }
 
 const { about, trust } = Astro.props;
@@ -24,27 +14,33 @@ const { about, trust } = Astro.props;
     <div class="about-trust__story">
       <p class="section__eyebrow">{about.eyebrow}</p>
       <h2 class="section__title" id="about-title">{about.title}</h2>
-      <p>{about.lead}</p>
+      {about.lead && <p>{about.lead}</p>}
 
-      <ol class="about-trust__steps">
-        {about.steps.map((step) => <li>{step}</li>)}
-      </ol>
+      {
+        about.steps.length > 0 && (
+          <ol class="about-trust__steps">
+            {about.steps.map((step) => <li>{step}</li>)}
+          </ol>
+        )
+      }
     </div>
 
     <aside class="about-trust__proof" id="trust" aria-labelledby="trust-title">
       <p class="section__eyebrow">{trust.eyebrow}</p>
       <h2 id="trust-title">{trust.title}</h2>
 
-      <div class="about-trust__items">
-        {
-          trust.items.map((item) => (
-            <div class="about-trust__item">
-              <strong>{item.value}</strong>
-              <span>{item.label}</span>
-            </div>
-          ))
-        }
-      </div>
+      {
+        trust.items.length > 0 && (
+          <div class="about-trust__items">
+            {trust.items.map((item) => (
+              <div class="about-trust__item">
+                <strong>{item.value}</strong>
+                <span>{item.label}</span>
+              </div>
+            ))}
+          </div>
+        )
+      }
     </aside>
   </div>
 </section>
@@ -52,11 +48,11 @@ const { about, trust } = Astro.props;
 <style>
   .about-trust {
     background: var(--color-ink);
-    color: #fff;
+    color: var(--color-white);
   }
 
   .about-trust :global(.section__eyebrow) {
-    color: #f0ab90;
+    color: var(--color-dark-section-eyebrow);
   }
 
   .about-trust__grid {
@@ -72,7 +68,7 @@ const { about, trust } = Astro.props;
 
   .about-trust__story p:not(.section__eyebrow) {
     margin: 1.25rem 0 0;
-    color: rgba(255, 255, 255, 0.76);
+    color: var(--color-dark-section-text);
     font-size: 1.08rem;
   }
 
@@ -89,7 +85,7 @@ const { about, trust } = Astro.props;
     position: relative;
     min-height: 3.2rem;
     padding: 0.2rem 0 0.2rem 3.4rem;
-    color: rgba(255, 255, 255, 0.82);
+    color: var(--color-dark-section-text-strong);
   }
 
   .about-trust__steps li::before {
@@ -100,19 +96,19 @@ const { about, trust } = Astro.props;
     width: 2.35rem;
     height: 2.35rem;
     place-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid var(--color-dark-section-line-strong);
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff;
+    background: var(--color-dark-section-surface);
+    color: var(--color-white);
     content: counter(steps);
     counter-increment: steps;
     font-weight: 800;
   }
 
   .about-trust__proof {
-    border: 1px solid rgba(255, 255, 255, 0.13);
+    border: 1px solid var(--color-dark-section-line);
     border-radius: var(--radius);
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--color-dark-section-surface);
     padding: 1.6rem;
     scroll-margin-top: 6rem;
   }
@@ -129,25 +125,25 @@ const { about, trust } = Astro.props;
     gap: 1px;
     margin-top: 1.6rem;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--color-dark-section-line);
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--color-dark-section-line);
   }
 
   .about-trust__item {
     display: grid;
     gap: 0.3rem;
-    background: rgba(23, 33, 29, 0.58);
+    background: var(--color-dark-section-surface-strong);
     padding: 1.1rem;
   }
 
   .about-trust__item strong {
-    color: #fff;
+    color: var(--color-white);
     font-size: 1rem;
   }
 
   .about-trust__item span {
-    color: rgba(255, 255, 255, 0.68);
+    color: var(--color-dark-section-text-muted);
     font-size: 0.93rem;
   }
 

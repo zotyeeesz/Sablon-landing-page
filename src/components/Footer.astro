@@ -1,26 +1,30 @@
 ---
-interface FooterLink {
-  label: string;
-  href: string;
-}
+import type { BrandConfig, FooterConfig } from "../types/site";
 
 interface Props {
-  brand: {
-    name: string;
-  };
-  links: FooterLink[];
+  brand: BrandConfig;
+  footer: FooterConfig;
 }
 
-const { brand, links } = Astro.props;
+const { brand, footer } = Astro.props;
 const year = new Date().getFullYear();
+const copyright = footer.copyright ?? "Minden jog fenntartva.";
 ---
 
 <footer class="footer">
   <div class="footer__inner">
-    <p>© {year} {brand.name}. Minden jog fenntartva.</p>
-    <nav class="footer__nav" aria-label="Lábléc navigáció">
-      {links.map((link) => <a href={link.href}>{link.label}</a>)}
-    </nav>
+    <p>© {year} {brand.name}. {copyright}</p>
+    {
+      footer.links.length > 0 && (
+        <nav class="footer__nav" aria-label="Lábléc navigáció">
+          {footer.links.map((link) => (
+            <a href={link.href} target={link.target} rel={link.rel}>
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      )
+    }
   </div>
 </footer>
 

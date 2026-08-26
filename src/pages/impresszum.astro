@@ -2,71 +2,79 @@
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { site } from "../data/site";
+import { siteConfig } from "../config/site";
 
-const nav = site.nav.map((item) => ({
+const toHomeHref = (href: string) => (href.startsWith("#") ? `/${href}` : href);
+
+const navigation = siteConfig.navigation.map((item) => ({
   ...item,
-  href: `/${item.href}`,
+  href: toHomeHref(item.href),
 }));
 
-const footerLinks = site.footer.links.map((item) => ({
-  ...item,
-  href: item.href.startsWith("#") ? `/${item.href}` : item.href,
-}));
+const footer = {
+  ...siteConfig.footer,
+  links: siteConfig.footer.links.map((item) => ({
+    ...item,
+    href: toHomeHref(item.href),
+  })),
+};
 
 const legalGroups = [
   {
     id: "provider",
     title: "Szolgáltató adatai",
     rows: [
-      ["Szolgáltató neve", site.legal.operatorName],
-      ["Márkanév", site.legal.brandName],
-      ["Székhely / lakcím", site.legal.address],
-      ["Tevékenység", site.legal.activity],
+      ["Szolgáltató neve", siteConfig.legal.operatorName],
+      ["Márkanév", siteConfig.legal.brandName],
+      ["Székhely / lakcím", siteConfig.legal.address],
+      ["Tevékenység", siteConfig.legal.activity],
     ],
   },
   {
     id: "contact",
     title: "Kapcsolat",
     rows: [
-      ["Email", site.legal.email],
-      ["Telefon", site.legal.phone],
+      ["Email", siteConfig.legal.email],
+      ["Telefon", siteConfig.legal.phone],
     ],
   },
   {
     id: "registration",
     title: "Nyilvántartási és adózási adatok",
     rows: [
-      ["Adószám", site.legal.taxNumber],
-      ["Nyilvántartó hatóság", site.legal.registrationAuthority],
-      ["Nyilvántartási szám", site.legal.registrationNumber],
+      ["Adószám", siteConfig.legal.taxNumber],
+      ["Nyilvántartó hatóság", siteConfig.legal.registrationAuthority],
+      ["Nyilvántartási szám", siteConfig.legal.registrationNumber],
     ],
   },
   {
     id: "hosting",
     title: "Tárhelyszolgáltató",
     rows: [
-      ["Név", site.legal.hostingProvider],
-      ["Cím", site.legal.hostingProviderAddress],
-      ["Email", site.legal.hostingProviderEmail],
+      ["Név", siteConfig.legal.hostingProvider],
+      ["Cím", siteConfig.legal.hostingProviderAddress],
+      ["Email", siteConfig.legal.hostingProviderEmail],
     ],
   },
 ];
 ---
 
-<BaseLayout title={`${site.legal.title} | ${site.brand.name}`} description={site.legal.description}>
-  <Header brand={site.brand} nav={nav} contact={site.contact} />
+<BaseLayout
+  site={siteConfig}
+  seo={{
+    title: `${siteConfig.legal.title} | ${siteConfig.brand.name}`,
+    description: siteConfig.legal.description,
+    type: "article",
+  }}
+>
+  <Header brand={siteConfig.brand} header={siteConfig.header} navigation={navigation} />
   <main id="main-content">
     <section class="legal-page">
       <div class="legal-page__inner">
         <a class="legal-page__back" href="/">Vissza a főoldalra</a>
         <p class="section__eyebrow">Jogi információk</p>
-        <h1>{site.legal.title}</h1>
-        <p class="legal-page__lead">
-          Ezen az oldalon a Landora weboldal üzemeltetésével és a szolgáltatóval
-          kapcsolatos alapadatok találhatók. A kiegészítendő mezőket az éles
-          publikálás előtt pontosítani kell.
-        </p>
+        <h1>{siteConfig.legal.title}</h1>
+        <p class="legal-page__lead">{siteConfig.legal.lead}</p>
 
         <div class="legal-page__grid">
           {
@@ -88,19 +96,19 @@ const legalGroups = [
           }
         </div>
 
-        <p class="legal-page__note">Utolsó frissítés: {site.legal.updatedAt}</p>
+        <p class="legal-page__note">Utolsó frissítés: {siteConfig.legal.updatedAt}</p>
       </div>
     </section>
   </main>
-  <Footer brand={site.brand} links={footerLinks} />
+  <Footer brand={siteConfig.brand} footer={footer} />
 </BaseLayout>
 
 <style>
   .legal-page {
     min-height: 72svh;
     background:
-      linear-gradient(180deg, rgba(127, 153, 127, 0.14), transparent 18rem),
-      #fff;
+      linear-gradient(180deg, var(--color-legal-accent-bg), transparent 18rem),
+      var(--color-surface);
     padding: 5.5rem 1.25rem 6rem;
   }
 
@@ -167,7 +175,7 @@ const legalGroups = [
     display: grid;
     gap: 0.18rem;
     padding-top: 0.9rem;
-    border-top: 1px solid rgba(220, 228, 218, 0.9);
+    border-top: 1px solid var(--color-line);
   }
 
   .legal-card dl div:first-child {

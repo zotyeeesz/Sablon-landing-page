@@ -7,17 +7,43 @@ import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import Services from "../components/Services.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { site } from "../data/site";
+import { siteConfig } from "../config/site";
+
+const visibleSections = siteConfig.landing.sections.filter((section) => section.enabled !== false);
 ---
 
-<BaseLayout title={site.meta.title} description={site.meta.description}>
-  <Header brand={site.brand} nav={site.nav} contact={site.contact} />
+<BaseLayout site={siteConfig}>
+  <Header
+    brand={siteConfig.brand}
+    header={siteConfig.header}
+    navigation={siteConfig.navigation}
+  />
   <main id="main-content">
-    <Hero hero={site.hero} />
-    <Services intro={site.servicesIntro} services={site.services} />
-    <AboutTrust about={site.about} trust={site.trust} />
-    <CTA cta={site.cta} />
-    <Contact contact={site.contact} />
+    {
+      visibleSections.map((section) => {
+        if (section.id === "hero") {
+          return <Hero hero={siteConfig.hero} />;
+        }
+
+        if (section.id === "services") {
+          return <Services intro={siteConfig.servicesIntro} services={siteConfig.services} />;
+        }
+
+        if (section.id === "aboutTrust") {
+          return <AboutTrust about={siteConfig.about} trust={siteConfig.trust} />;
+        }
+
+        if (section.id === "cta") {
+          return <CTA cta={siteConfig.cta} />;
+        }
+
+        if (section.id === "contact") {
+          return <Contact contact={siteConfig.contact} />;
+        }
+
+        return null;
+      })
+    }
   </main>
-  <Footer brand={site.brand} links={site.footer.links} />
+  <Footer brand={siteConfig.brand} footer={siteConfig.footer} />
 </BaseLayout>

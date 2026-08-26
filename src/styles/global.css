@@ -10,7 +10,36 @@
   --color-accent-strong: #9d3f2e;
   --color-sage: #7f997f;
   --color-blue: #416979;
+  --color-white: #ffffff;
+  --color-text-soft: #4f5f57;
+  --color-document-text: #43534b;
+  --color-field-line: #cfd9ce;
+  --color-primary-hover: #26362f;
+  --color-header-border: rgba(220, 228, 218, 0.82);
+  --color-header-bg: rgba(247, 248, 243, 0.88);
+  --color-brand-mark-bg: #f5f3ec;
+  --color-nav-hover-bg: rgba(127, 153, 127, 0.13);
+  --color-selection: rgba(199, 95, 72, 0.22);
+  --color-focus-ring: rgba(199, 95, 72, 0.5);
+  --color-button-secondary-border: rgba(23, 33, 29, 0.18);
+  --color-button-secondary-border-hover: rgba(23, 33, 29, 0.36);
+  --color-button-secondary-bg: rgba(255, 255, 255, 0.72);
+  --color-hero-bg: #f4f5ef;
+  --color-hero-stat-line: rgba(199, 95, 72, 0.42);
+  --color-contact-link-line: rgba(199, 95, 72, 0.4);
+  --color-contact-field-focus: rgba(199, 95, 72, 0.78);
+  --color-dark-section-eyebrow: #f0ab90;
+  --color-dark-section-text: rgba(255, 255, 255, 0.76);
+  --color-dark-section-text-strong: rgba(255, 255, 255, 0.82);
+  --color-dark-section-text-muted: rgba(255, 255, 255, 0.68);
+  --color-dark-section-line: rgba(255, 255, 255, 0.13);
+  --color-dark-section-line-strong: rgba(255, 255, 255, 0.18);
+  --color-dark-section-surface: rgba(255, 255, 255, 0.06);
+  --color-dark-section-surface-strong: rgba(23, 33, 29, 0.58);
+  --color-legal-accent-bg: rgba(127, 153, 127, 0.14);
+  --color-cta-accent-bg: rgba(127, 153, 127, 0.18);
   --shadow-soft: 0 22px 60px rgba(23, 33, 29, 0.1);
+  --shadow-contact-field-focus: 0 0 0 4px rgba(199, 95, 72, 0.12);
   --container: 1180px;
   --radius: 8px;
 }
@@ -35,7 +64,7 @@ body {
 }
 
 body::selection {
-  background: rgba(199, 95, 72, 0.22);
+  background: var(--color-selection);
 }
 
 a {
@@ -56,7 +85,7 @@ textarea {
 }
 
 :focus-visible {
-  outline: 3px solid rgba(199, 95, 72, 0.5);
+  outline: 3px solid var(--color-focus-ring);
   outline-offset: 3px;
 }
 
@@ -68,7 +97,7 @@ textarea {
   transform: translateY(-140%);
   border-radius: 6px;
   background: var(--color-ink);
-  color: #fff;
+  color: var(--color-white);
   padding: 0.75rem 1rem;
 }
 
@@ -143,22 +172,22 @@ textarea {
 
 .button--primary {
   background: var(--color-ink);
-  color: #fff;
+  color: var(--color-white);
 }
 
 .button--primary:hover {
-  background: #26362f;
+  background: var(--color-primary-hover);
 }
 
 .button--secondary {
-  border-color: rgba(23, 33, 29, 0.18);
-  background: rgba(255, 255, 255, 0.72);
+  border-color: var(--color-button-secondary-border);
+  background: var(--color-button-secondary-bg);
   color: var(--color-ink);
 }
 
 .button--secondary:hover {
-  border-color: rgba(23, 33, 29, 0.36);
-  background: #fff;
+  border-color: var(--color-button-secondary-border-hover);
+  background: var(--color-surface);
 }
 
 @media (max-width: 760px) {

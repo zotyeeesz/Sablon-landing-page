@@ -1,23 +1,13 @@
 ---
-interface NavItem {
-  label: string;
-  href: string;
-}
+import type { BrandConfig, HeaderConfig, LinkItem } from "../types/site";
 
 interface Props {
-  brand: {
-    name: string;
-    role: string;
-    initials: string;
-    logo?: string;
-  };
-  nav: NavItem[];
-  contact: {
-    email: string;
-  };
+  brand: BrandConfig;
+  header: HeaderConfig;
+  navigation: LinkItem[];
 }
 
-const { brand, nav, contact } = Astro.props;
+const { brand, header, navigation } = Astro.props;
 ---
 
 <header class="site-header">
@@ -38,19 +28,31 @@ const { brand, nav, contact } = Astro.props;
       </span>
     </a>
 
-    <nav class="site-nav" aria-label="Fő navigáció">
-      {
-        nav.map((item) => (
-          <a class="site-nav__link" href={item.href}>
-            {item.label}
-          </a>
-        ))
-      }
-    </nav>
+    {
+      navigation.length > 0 && (
+        <nav class="site-nav" aria-label="Fő navigáció">
+          {navigation.map((item) => (
+            <a class="site-nav__link" href={item.href} target={item.target} rel={item.rel}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      )
+    }
 
-    <a class="button button--secondary site-header__cta" href={`mailto:${contact.email}`}>
-      Email
-    </a>
+    {
+      header.cta && (
+        <a
+          class="button button--secondary site-header__cta"
+          href={header.cta.href}
+          target={header.cta.target}
+          rel={header.cta.rel}
+          aria-label={header.cta.ariaLabel}
+        >
+          {header.cta.label}
+        </a>
+      )
+    }
   </div>
 </header>
 
@@ -59,8 +61,8 @@ const { brand, nav, contact } = Astro.props;
     position: sticky;
     top: 0;
     z-index: 20;
-    border-bottom: 1px solid rgba(220, 228, 218, 0.82);
-    background: rgba(247, 248, 243, 0.88);
+    border-bottom: 1px solid var(--color-header-border);
+    background: var(--color-header-bg);
     backdrop-filter: blur(18px);
   }
 
@@ -89,7 +91,7 @@ const { brand, nav, contact } = Astro.props;
     flex: 0 0 auto;
     place-items: center;
     border-radius: 8px;
-    background: #f5f3ec;
+    background: var(--color-brand-mark-bg);
     color: var(--color-ink);
     font-weight: 850;
     line-height: 1;
@@ -135,7 +137,7 @@ const { brand, nav, contact } = Astro.props;
   }
 
   .site-nav__link:hover {
-    background: rgba(127, 153, 127, 0.13);
+    background: var(--color-nav-hover-bg);
     color: var(--color-ink);
   }
 

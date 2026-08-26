@@ -1,18 +1,8 @@
 ---
+import type { CtaConfig } from "../types/site";
+
 interface Props {
-  cta: {
-    eyebrow: string;
-    title: string;
-    text: string;
-    primaryAction: {
-      label: string;
-      href: string;
-    };
-    secondaryAction: {
-      label: string;
-      href: string;
-    };
-  };
+  cta: CtaConfig;
 }
 
 const { cta } = Astro.props;
@@ -28,7 +18,13 @@ const { cta } = Astro.props;
 
     <div class="cta__actions" aria-label="Következő lépések">
       <a class="button button--primary" href={cta.primaryAction.href}>{cta.primaryAction.label}</a>
-      <a class="button button--secondary" href={cta.secondaryAction.href}>{cta.secondaryAction.label}</a>
+      {
+        cta.secondaryAction && (
+          <a class="button button--secondary" href={cta.secondaryAction.href}>
+            {cta.secondaryAction.label}
+          </a>
+        )
+      }
     </div>
   </div>
 </section>
@@ -37,7 +33,7 @@ const { cta } = Astro.props;
   .cta {
     border-block: 1px solid var(--color-line);
     background:
-      linear-gradient(90deg, rgba(127, 153, 127, 0.18), transparent 44%),
+      linear-gradient(90deg, var(--color-cta-accent-bg), transparent 44%),
       var(--color-surface-strong);
   }
 

@@ -1,29 +1,64 @@
 ---
 import "../styles/global.css";
+import type { SeoConfig, SiteConfig } from "../types/site";
 
 interface Props {
-  title: string;
-  description: string;
+  site: Pick<SiteConfig, "assets" | "brand" | "lang" | "seo" | "theme">;
+  seo?: Partial<SeoConfig>;
 }
 
-const { title, description } = Astro.props;
+const { site, seo } = Astro.props;
+const pageSeo = { ...site.seo, ...seo };
+const themeStyle = [
+  `color-scheme: ${site.theme.colorScheme}`,
+  ...Object.entries(site.theme.variables).map(([name, value]) => `${name}: ${value}`),
+].join("; ");
+
+const absoluteUrl = (url?: string) => {
+  if (!url) {
+    return undefined;
+  }
+
+  if (/^https?:\/\//.test(url)) {
+    return url;
+  }
+
+  return pageSeo.siteUrl ? new URL(url, pageSeo.siteUrl).toString() : url;
+};
+
+const canonicalUrl =
+  pageSeo.canonical ??
+  (pageSeo.siteUrl ? new URL(Astro.url.pathname, pageSeo.siteUrl).toString() : undefined);
+const ogImage = absoluteUrl(pageSeo.image);
 ---
 
 <!doctype html>
-<html lang="hu">
+<html lang={site.lang} style={themeStyle}>
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="/images/hero-workspace.png" />
-    <link rel="preload" as="image" href="/images/hero-workspace.png" />
-    <title>{title}</title>
+    <meta name="description" content={pageSeo.description} />
+    {pageSeo.noindex && <meta name="robots" content="noindex,nofollow" />}
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    {site.assets.faviconSvg && <link rel="icon" type="image/svg+xml" href={site.assets.faviconSvg} />}
+    {site.assets.faviconIco && <link rel="icon" href={site.assets.faviconIco} />}
+    <meta property="og:title" content={pageSeo.title} />
+    <meta property="og:description" content={pageSeo.description} />
+    <meta property="og:type" content={pageSeo.type ?? "website"} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {pageSeo.imageAlt && <meta property="og:image:alt" content={pageSeo.imageAlt} />}
+    <meta name="twitter:card" content={pageSeo.twitterCard ?? "summary_large_image"} />
+    <meta name="twitter:title" content={pageSeo.title} />
+    <meta name="twitter:description" content={pageSeo.description} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    {
+      site.assets.preloadImages?.map((image) => (
+        <link rel="preload" as="image" href={image} />
+      ))
+    }
+    <title>{pageSeo.title}</title>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Ugrás a tartalomra</a>

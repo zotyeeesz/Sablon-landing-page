@@ -2,7 +2,7 @@
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import BaseLayout from "./BaseLayout.astro";
-import { site } from "../data/site";
+import { siteConfig } from "../config/site";
 
 interface Props {
   frontmatter: {
@@ -12,20 +12,31 @@ interface Props {
 }
 
 const { frontmatter } = Astro.props;
+const toHomeHref = (href: string) => (href.startsWith("#") ? `/${href}` : href);
 
-const nav = site.nav.map((item) => ({
+const navigation = siteConfig.navigation.map((item) => ({
   ...item,
-  href: `/${item.href}`,
+  href: toHomeHref(item.href),
 }));
 
-const footerLinks = site.footer.links.map((item) => ({
-  ...item,
-  href: item.href.startsWith("#") ? `/${item.href}` : item.href,
-}));
+const footer = {
+  ...siteConfig.footer,
+  links: siteConfig.footer.links.map((item) => ({
+    ...item,
+    href: toHomeHref(item.href),
+  })),
+};
 ---
 
-<BaseLayout title={`${frontmatter.title} | ${site.brand.name}`} description={frontmatter.description}>
-  <Header brand={site.brand} nav={nav} contact={site.contact} />
+<BaseLayout
+  site={siteConfig}
+  seo={{
+    title: `${frontmatter.title} | ${siteConfig.brand.name}`,
+    description: frontmatter.description,
+    type: "article",
+  }}
+>
+  <Header brand={siteConfig.brand} header={siteConfig.header} navigation={navigation} />
   <main id="main-content">
     <section class="legal-document">
       <div class="legal-document__inner">
@@ -36,14 +47,14 @@ const footerLinks = site.footer.links.map((item) => ({
       </div>
     </section>
   </main>
-  <Footer brand={site.brand} links={footerLinks} />
+  <Footer brand={siteConfig.brand} footer={footer} />
 </BaseLayout>
 
 <style>
   .legal-document {
     background:
-      linear-gradient(180deg, rgba(127, 153, 127, 0.14), transparent 18rem),
-      #fff;
+      linear-gradient(180deg, var(--color-legal-accent-bg), transparent 18rem),
+      var(--color-surface);
     padding: 5.5rem 1.25rem 6rem;
   }
 
@@ -94,7 +105,7 @@ const footerLinks = site.footer.links.map((item) => ({
 
   .legal-document__content :global(p),
   .legal-document__content :global(li) {
-    color: #43534b;
+    color: var(--color-document-text);
     font-size: 1rem;
   }
 

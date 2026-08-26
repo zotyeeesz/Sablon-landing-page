@@ -1,17 +1,12 @@
 ---
+import type { ContactConfig } from "../types/site";
+
 interface Props {
-  contact: {
-    eyebrow: string;
-    title: string;
-    lead: string;
-    email: string;
-    phone: string;
-    city: string;
-    formAction: string;
-  };
+  contact: ContactConfig;
 }
 
 const { contact } = Astro.props;
+const phoneHref = contact.phone?.replace(/[^\d+]/g, "");
 ---
 
 <section class="contact section" id="contact" aria-labelledby="contact-title">
@@ -19,39 +14,55 @@ const { contact } = Astro.props;
     <div class="contact__intro">
       <p class="section__eyebrow">{contact.eyebrow}</p>
       <h2 class="section__title" id="contact-title">{contact.title}</h2>
-      <p class="section__lead">{contact.lead}</p>
+      {contact.lead && <p class="section__lead">{contact.lead}</p>}
 
       <div class="contact__details" aria-label="Elérhetőségek">
         <a href={`mailto:${contact.email}`}>{contact.email}</a>
-        <a href={`tel:${contact.phone.replaceAll(" ", "")}`}>{contact.phone}</a>
-        <span>{contact.city}</span>
+        {contact.phone && <a href={`tel:${phoneHref}`}>{contact.phone}</a>}
+        {contact.city && <span>{contact.city}</span>}
       </div>
     </div>
 
-    <form class="contact__form" action={contact.formAction} method="post" enctype="text/plain">
-      <div class="field">
-        <label for="name">Név</label>
-        <input id="name" name="Név" autocomplete="name" required />
-      </div>
+    <form
+      class="contact__form"
+      action={contact.form.action}
+      method={contact.form.method}
+      enctype={contact.form.enctype}
+    >
+      {
+        contact.form.fields.map((field) => (
+          <div class="field">
+            <label for={field.id}>{field.label}</label>
+            {field.type === "textarea" ? (
+              <textarea
+                id={field.id}
+                name={field.name}
+                rows={field.rows ?? 5}
+                placeholder={field.placeholder}
+                required={field.required}
+              ></textarea>
+            ) : (
+              <input
+                id={field.id}
+                name={field.name}
+                type={field.type ?? "text"}
+                autocomplete={field.autocomplete}
+                placeholder={field.placeholder}
+                required={field.required}
+              />
+            )}
+          </div>
+        ))
+      }
 
-      <div class="field">
-        <label for="email">Email</label>
-        <input id="email" name="Email" type="email" autocomplete="email" required />
-      </div>
-
-      <div class="field">
-        <label for="message">Projekt röviden</label>
-        <textarea id="message" name="Projekt" rows="5" required></textarea>
-      </div>
-
-      <button class="button button--primary" type="submit">Üzenet küldése</button>
+      <button class="button button--primary" type="submit">{contact.form.submitLabel}</button>
     </form>
   </div>
 </section>
 
 <style>
   .contact {
-    background: #fff;
+    background: var(--color-surface);
   }
 
   .contact__grid {
@@ -75,7 +86,7 @@ const { contact } = Astro.props;
   }
 
   .contact__details a {
-    border-bottom: 1px solid rgba(199, 95, 72, 0.4);
+    border-bottom: 1px solid var(--color-contact-link-line);
   }
 
   .contact__details a:hover {
@@ -106,9 +117,9 @@ const { contact } = Astro.props;
   input,
   textarea {
     width: 100%;
-    border: 1px solid #cfd9ce;
+    border: 1px solid var(--color-field-line);
     border-radius: 6px;
-    background: #fff;
+    background: var(--color-surface);
     color: var(--color-ink);
     padding: 0.85rem 0.9rem;
   }
@@ -120,9 +131,9 @@ const { contact } = Astro.props;
 
   input:focus,
   textarea:focus {
-    border-color: rgba(199, 95, 72, 0.78);
+    border-color: var(--color-contact-field-focus);
     outline: none;
-    box-shadow: 0 0 0 4px rgba(199, 95, 72, 0.12);
+    box-shadow: var(--shadow-contact-field-focus);
   }
 
   .contact__form .button {
